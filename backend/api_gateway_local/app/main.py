@@ -1,5 +1,81 @@
 from __future__ import annotations
+import os
+from typing import Any, Literal
+import httpx
+from fastapi import Depends, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from common.auth import require_auth
+from common.logging import configure_logging
+from common.rate_limit import RateLimitMiddleware
+from common.settings import CommonSettings
 
+settings = CommonSettings(service_name="api_gateway_local")
+configure_logging("api_gateway_local")
+
+TX_URL = os.environ.get("TRANSACTION_SERVICE_URL", "http://localhost:8002")
+CONV_URL = os.environ.get("CONVERSATION_SERVICE_URL", "http://localhost:8001")
+
+app = FastAPI(
+  title="Local API Gateway (BFF)",
+  version="0.1.0",
+  description="Local gateway that standardizes endpoint contracts for the frontend. In production this role is done by AWS API Gateway.",
+)
+
+app.add_middleware(
+  RateLimitMiddleware,
+  enabled=settings.rate_limit_enabled,
+  rps=settings.rate_limit_rps,
+  burst=settings.rate_limit_burst,
+)
+
+app.add_middleware(
+  CORSMiddleware,
+  allow_origins=[settings.cors_allow_origins],
+  allow_credentials=True,
+  allow_methods=["*"],
+  allow_headers=["*"],
+)
+
+# --------------------
+# Supervisor review endpoints
+# --------------------
+
+class ReviewItem(BaseModel):
+  message_id: str
+  user_id: str
+  conversation_id: str
+  content: str
+  status: Literal["pending", "accepted", "rejected"] = "pending"
+  reviewed_by: str | None = None
+  reviewed_at: float | None = None
+
+REVIEW_STORE: dict[str, ReviewItem] = {}
+
+@app.post("/v1/supervisor/review/add")
+async def add_review_item(item: ReviewItem):
+  REVIEW_STORE[item.message_id] = item
+  return {"ok": True}
+
+@app.get("/v1/supervisor/review/list")
+async def list_review_items():
+  return {"items": list(REVIEW_STORE.values())}
+
+class ReviewAction(BaseModel):
+  message_id: str
+  action: Literal["accept", "reject"]
+  reviewer: str
+
+@app.post("/v1/supervisor/review/action")
+async def review_action(action: ReviewAction):
+  item = REVIEW_STORE.get(action.message_id)
+  if not item:
+    return {"ok": False, "error": "Not found"}
+  item.status = "accepted" if action.action == "accept" else "rejected"
+  item.reviewed_by = action.reviewer
+  item.reviewed_at = time.time()
+  REVIEW_STORE[action.message_id] = item
+  return {"ok": True, "status": item.status}
 import os
 from typing import Any
 

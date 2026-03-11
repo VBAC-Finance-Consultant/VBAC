@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  api_gateway:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: uvicorn api_gateway_local.app.main:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    environment:
+      - TRANSACTION_SERVICE_URL=http://transaction_service:8002
+      - CONVERSATION_SERVICE_URL=http://conversation_service:8001
+      - DISABLE_AUTH=1
+      - RATE_LIMIT_ENABLED=0
+    depends_on:
+      - transaction_service
+      - conversation_service
+    volumes:
+      - ./backend/data:/app/data
+
+  transaction_service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: uvicorn transaction_service.app.main:app --host 0.0.0.0 --port 8002
+    ports:
+      - "8002:8002"
+    environment:
+      - DISABLE_AUTH=1
+      - RATE_LIMIT_ENABLED=0
+      - DUCKDB_PATH=/app/.duckdb/transaction_service-ALL.duckdb
+    volumes:
+      - ./backend/.duckdb:/app/.duckdb
+
+  conversation_service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: uvicorn conversation_service.app.main:app --host 0.0.0.0 --port 8001
+    ports:
+      - "8001:8001"
+    environment:
+      - DISABLE_AUTH=1
+      - RATE_LIMIT_ENABLED=0
+      # Provide OPENAI_API_KEY below if used
+      # - OPENAI_API_KEY=${OPENAI_API_KEY}
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - api_gateway

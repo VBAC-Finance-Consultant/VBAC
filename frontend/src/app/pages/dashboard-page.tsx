@@ -54,7 +54,7 @@ export function DashboardPage() {
       tx_count: 68,
       installment_ratio: 0.36,
       top_categories: [
-        { category: "Shopping", total: 7200 },
+        { category: "Education", total: 7200 },
         { category: "Travel", total: 4200 },
         { category: "Groceries", total: 2800 },
         { category: "Bills & Utilities", total: 1800 },
@@ -175,7 +175,7 @@ export function DashboardPage() {
         currency: "EUR",
         merchant_name: "Zara",
         channel: "POS",
-        category: "Shopping",
+        category: "Education",
         mcc: 5651,
         isin: "ISIN0008",
         installment: null,
@@ -289,7 +289,7 @@ export function DashboardPage() {
         currency: "EUR",
         merchant_name: "IKEA",
         channel: "POS",
-        category: "Shopping",
+        category: "Education",
         mcc: 5712,
         isin: "ISIN0016",
         installment: null,
@@ -414,9 +414,9 @@ export function DashboardPage() {
         direction: "debit",
         amount: -88.3,
         currency: "EUR",
-        merchant_name: "Online Shopping",
+        merchant_name: "Online Course",
         channel: "Online",
-        category: "Shopping",
+        category: "Education",
         mcc: 5311,
         isin: "ISIN0025",
         installment: null,
@@ -430,9 +430,9 @@ export function DashboardPage() {
         {
           level: "high",
           title: "Spend concentration detected",
-          description: "Your spend is concentrated in **Shopping** over the last 90 days.",
-          impact: "Consider setting a category budget for Shopping.",
-          why: ["High share in Shopping", "Consistent pattern in recent transactions"],
+          description: "Your spend is concentrated in **Education** over the last 90 days.",
+          impact: "Consider checking for tax-deductible educational expenses.",
+          why: ["High share in Education", "Consistent pattern in recent transactions"],
         },
         {
           level: "warning",
@@ -459,7 +459,7 @@ export function DashboardPage() {
           product: "Rewards Credit Card",
           type: "credit_card",
           match: 0.86,
-          why: ["High spend in Shopping", "Better cashback on e‑commerce"],
+          why: ["High spend in Education", "Better cashback on professional development"],
           explanation: "Maximize rewards on your dominant spend category.",
         },
         {
@@ -650,6 +650,61 @@ export function DashboardPage() {
                 </CardContent>
               </Card>
             ))}
+          </div>
+
+          {/* Investment Portfolio - Phước Task */}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-2">
+            <Card className="border-[#EEF1F6] shadow-none">
+              <CardHeader className="pb-2">
+                <div className="text-lg font-bold tracking-tight text-[#111827]">
+                  Investment Portfolio
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between rounded-xl bg-[#F7F9FF] p-4 font-medium text-[#1C2433]">
+                    <div className="flex items-center gap-3">
+                      <div className="grid h-10 w-10 place-items-center rounded-lg bg-white shadow-sm font-bold text-[#FF6B6B]">V</div>
+                      <div>
+                        <div>VIC</div>
+                        <div className="text-xs text-[#A0A7B4]">Vingroup JSC</div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-bold">1,000 shares</div>
+                      <div className="text-xs text-[#3AD6B0]">+2.4% Today</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between rounded-xl bg-[#F7F9FF] p-4 font-medium text-[#1C2433]">
+                    <div className="flex items-center gap-3">
+                      <div className="grid h-10 w-10 place-items-center rounded-lg bg-white shadow-sm font-bold text-[#4C6FFF]">F</div>
+                      <div>
+                        <div>FPT</div>
+                        <div className="text-xs text-[#A0A7B4]">FPT Corporation</div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-bold">500 shares</div>
+                      <div className="text-xs text-[#FF6B6B]">-0.8% Today</div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-[#EEF1F6] shadow-none bg-[#F7F9FF]">
+              <CardHeader className="pb-2">
+                <div className="text-lg font-bold tracking-tight text-[#111827]">
+                  Asset Allocation
+                </div>
+              </CardHeader>
+              <CardContent className="flex h-[150px] items-center justify-center">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-[#111827]">85%</div>
+                  <div className="text-xs text-[#A0A7B4]">Stocks & Equity</div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Statistics */}

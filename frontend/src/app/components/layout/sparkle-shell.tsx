@@ -1,15 +1,14 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  Bell,
-  CreditCard,
   Grid2X2,
   HelpCircle,
   LogOut,
   MessageSquare,
   Settings,
   Shield,
-  Wallet,
+  ArrowLeftRight,
+  BarChart2,
 } from "lucide-react";
 
 import { cn } from "../ui/utils";
@@ -30,10 +29,8 @@ type NavItem = {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Dashboard", path: "/dashboard", icon: Grid2X2 },
-  { label: "Transactions", path: "/transactions", icon: CreditCard },
-  { label: "Card Activities", path: "/card-activities", icon: Wallet },
+  { label: "Transfer Money", path: "/transfer", icon: ArrowLeftRight },
   { label: "AI Consultant", path: "/chat", icon: MessageSquare },
-  { label: "Notifications", path: "/notifications", icon: Bell },
 ];
 
 const PREF_ITEMS: NavItem[] = [{ label: "Privacy", path: "/privacy", icon: Shield }];
@@ -41,7 +38,7 @@ const PREF_ITEMS: NavItem[] = [{ label: "Privacy", path: "/privacy", icon: Shiel
 function SparkleLogo() {
   return (
     <div className="flex items-center gap-3">
-      <div className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[#6D8CFF] to-[#57D1B9] shadow-sm">
+      <div className="grid h-9 w-9 place-items-center rounded-full bg-[#39D6B0] shadow-sm">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path
             d="M18.7 7.2c-1.6-2-4.6-2.9-7.1-1.7C9.7 6.3 9.2 7.9 9.8 9c.6 1.2 2.2 1.4 3.7 1.7 2.2.4 4.6 1.1 4.8 3.6.2 2.5-2 4.4-5 4.8-2.7.4-5.4-.5-7-2.2"
@@ -174,11 +171,20 @@ export function SparkleShell({
                 <span className="text-[14px] font-medium">Log out</span>
               </button>
 
+              <button
+                type="button"
+                onClick={() => navigate("/admin")}
+                className="mt-2 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left border border-[#EEF1F6] text-[#6B7383] hover:bg-[#F7F9FF] transition-colors"
+              >
+                <Shield className="h-4 w-4" />
+                <span className="text-[12px] font-semibold">Admin Portal</span>
+              </button>
+
               <div className="mt-4 flex items-center gap-3 rounded-xl px-4 py-3">
                 <div className="h-9 w-9 overflow-hidden rounded-full bg-[#EEF1F6]" />
                 <div className="min-w-0">
                   <div className="truncate text-[13px] font-semibold text-[#1C2433]">
-                    Julie 
+                    Julie
                   </div>
                   <div className="truncate text-[11px] text-[#A0A7B4]">
                     juliehuynh@gmail.com
