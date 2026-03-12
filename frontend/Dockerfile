@@ -10,13 +10,16 @@ RUN npm install
 
 # Copy source and build
 COPY . .
+
+# Frontend sẽ gọi /api/... (relative) thay vì http://localhost:8000
+ENV VITE_API_BASE_URL=/api
 RUN npm run build
 
 # Production Stage
 FROM nginx:alpine
 
-# Copy custom nginx configuration if needed
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Nginx config với reverse proxy /api/ -> api_gateway
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy build output from builder
 COPY --from=builder /app/dist /usr/share/nginx/html
